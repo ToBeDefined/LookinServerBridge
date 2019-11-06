@@ -301,7 +301,7 @@
 				MonkeyDevInstallOnAnyBuild = YES;
 				MonkeyDevInstallOnProfiling = YES;
 				MonkeyDevkillProcessOnInstall = SpringBoard;
-				PRODUCT_BUNDLE_IDENTIFIER = com.iboxpay.LookinServerBridge;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.tbd.LookinServerBridge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -339,7 +339,7 @@
 				MonkeyDevInstallOnAnyBuild = YES;
 				MonkeyDevInstallOnProfiling = YES;
 				MonkeyDevkillProcessOnInstall = SpringBoard;
-				PRODUCT_BUNDLE_IDENTIFIER = com.iboxpay.LookinServerBridge;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.tbd.LookinServerBridge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
