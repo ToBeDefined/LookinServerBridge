@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3FEB9525237185CF008D981A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FEB9524237185CF008D981A /* Foundation.framework */; };
 		3FEB952D237185D0008D981A /* LookinServerBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3FEB952C237185D0008D981A /* LookinServerBridge.mm */; };
-		3FEB953B23726C23008D981A /* LookinServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FEB953A23726C23008D981A /* LookinServer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,7 +19,6 @@
 		3FEB952C237185D0008D981A /* LookinServerBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LookinServerBridge.mm; sourceTree = "<group>"; };
 		3FEB9531237185D0008D981A /* LookinServerBridge.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = LookinServerBridge.plist; sourceTree = "<group>"; };
 		3FEB9537237185EE008D981A /* info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
-		3FEB953A23726C23008D981A /* LookinServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LookinServer.framework; path = Library/Frameworks/LookinServer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,7 +27,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FEB9525237185CF008D981A /* Foundation.framework in Frameworks */,
-				3FEB953B23726C23008D981A /* LookinServer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +53,6 @@
 		3FEB9523237185CF008D981A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3FEB953A23726C23008D981A /* LookinServer.framework */,
 				3FEB9524237185CF008D981A /* Foundation.framework */,
 			);
 			name = Frameworks;

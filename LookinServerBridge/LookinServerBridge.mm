@@ -34,7 +34,34 @@
 @implementation LookinServerBridge
 
 + (void)load {
-    NSLog(@"[*] Lookin Server Bridge Loaded");
+    NSLog(@"[*] LS: Loading...");
+    NSString *bundleID = [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString *)kCFBundleIdentifierKey];
+    NSLog(@"[*] LS: Bundle ID: %@", bundleID);
+    
+    // 排除 springboard
+    if ([bundleID.lowercaseString isEqualToString:@"com.apple.springboard"]) {
+        NSLog(@"[!] LS: Not Load for SpringBoard.");
+        return;
+    }
+    
+    // 排除 APP 自带 LookingServer 的
+    uint32_t image_count = _dyld_image_count();
+    const char *app_lookin_server = NULL;
+    for (uint32_t index = 0; index < image_count; ++index) {
+        const char *image_name = _dyld_get_image_name(index);
+        if (strstr(image_name, "LookinServer.framework/LookinServer") != NULL) {
+            app_lookin_server = image_name;
+            break;
+        }
+    }
+    if (app_lookin_server != NULL) {
+        NSLog(@"[!] LS: Is Loaded App LS: %s.", app_lookin_server);
+        return;
+    }
+    
+    // 其他正常情况, 加载 LookinServer
+    dlopen("/Library/Frameworks/LookinServer.framework/LookinServer", RTLD_GLOBAL | RTLD_NOW);
+    NSLog(@"[+] LS: Loaded for '%@'.", bundleID);
 }
 
 @end
