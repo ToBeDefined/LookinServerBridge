@@ -19,21 +19,9 @@
 #import "CaptainHook/CaptainHook.h"
 #include <notify.h> // not required; for examples only
 
-// Objective-C runtime hooking using CaptainHook:
-//   1. declare class using CHDeclareClass()
-//   2. load class using CHLoadClass() or CHLoadLateClass() in CHConstructor
-//   3. hook method using CHOptimizedMethod()
-//   4. register hook using CHHook() in CHConstructor
-//   5. (optionally) call old method using CHSuper()
-
-
-@interface LookinServerBridge : NSObject
-
-@end
-
-@implementation LookinServerBridge
-
-+ (void)load {
+static void *_lookin_server_handle = NULL;
+__attribute__((constructor(0)))
+static void _constructor(int argc, const char *argv[]) {
     NSLog(@"[*] LS: Loading...");
     NSString *bundleID = [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString *)kCFBundleIdentifierKey];
     NSLog(@"[*] LS: Bundle ID: %@", bundleID);
@@ -59,10 +47,21 @@
         return;
     }
     
+    if (_lookin_server_handle != NULL) {
+        dlclose(_lookin_server_handle);
+        _lookin_server_handle = NULL;
+    }
     // 其他正常情况, 加载 LookinServer
-    dlopen("/Library/Frameworks/LookinServer.framework/LookinServer", RTLD_GLOBAL | RTLD_NOW);
+    _lookin_server_handle = dlopen("/Library/Frameworks/LookinServer.framework/LookinServer", RTLD_GLOBAL | RTLD_NOW);
     NSLog(@"[+] LS: Loaded for '%@'.", bundleID);
 }
 
-@end
-
+__attribute__((destructor(-1)))
+static void _destructor(int argc, const char *argv[]) {
+    if (_lookin_server_handle != NULL) {
+        dlclose(_lookin_server_handle);
+        _lookin_server_handle = NULL;
+        NSString *bundleID = [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString *)kCFBundleIdentifierKey];
+        NSLog(@"[-] LS: Close for '%@'.", bundleID);
+    }
+}
