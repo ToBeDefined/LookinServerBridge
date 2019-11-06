@@ -19,6 +19,14 @@
 #import "CaptainHook/CaptainHook.h"
 #include <notify.h> // not required; for examples only
 
+
+///
+/// 1. copy LookinServer.framework to /usr/lib/LookinServer.framework
+/// 2. cd /usr/lib/LookinServer.framework/
+/// 3. chmod 777 LookinServer
+/// 4. cd /Library/Frameworks/
+/// 5. ln -s /usr/lib/LookinServer.framework LookinServer.framework
+///
 static void *_lookin_server_handle = NULL;
 __attribute__((constructor(0)))
 static void _constructor(int argc, const char *argv[]) {
