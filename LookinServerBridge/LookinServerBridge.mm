@@ -64,7 +64,7 @@ static void _constructor(int argc, const char *argv[]) {
     NSLog(@"[+] LS: Loaded for '%@'.", bundleID);
 }
 
-__attribute__((destructor(-1)))
+__attribute__((destructor(0)))
 static void _destructor(int argc, const char *argv[]) {
     if (_lookin_server_handle != NULL) {
         dlclose(_lookin_server_handle);
