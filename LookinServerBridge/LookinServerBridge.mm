@@ -45,16 +45,22 @@
 /// 4. cd /Library/Frameworks/
 /// 5. ln -s /usr/lib/LookinServer.framework LookinServer.framework
 ///
+
+@interface _LookinServerBridge : NSObject
+@end
+
+@implementation _LookinServerBridge
+@end
+
 static void *_lookin_server_handle = NULL;
 __attribute__((constructor(0)))
 static void _constructor(int argc, const char *argv[]) {
-    NSLog(@"[*] LS: Loading...");
     NSString *bundleID = [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString *)kCFBundleIdentifierKey];
-    NSLog(@"[*] LS: Bundle ID: %@", bundleID);
+    NSLog(@"[*] LS: '%@': Loading...", bundleID);
     
     // 排除 springboard
     if ([bundleID.lowercaseString isEqualToString:@"com.apple.springboard"]) {
-        NSLog(@"[!] LS: Not Load for SpringBoard.");
+        NSLog(@"[!] LS: '%@': Don't Load InjectLS for SpringBoard App.", bundleID);
         return;
     }
     
@@ -69,17 +75,22 @@ static void _constructor(int argc, const char *argv[]) {
         }
     }
     if (app_lookin_server != NULL) {
-        NSLog(@"[!] LS: Is Loaded App LS: %s.", app_lookin_server);
+        NSLog(@"[!] LS: '%@': AppLS is Loaded: %s.", bundleID, app_lookin_server);
         return;
     }
     
     if (_lookin_server_handle != NULL) {
-        dlclose(_lookin_server_handle);
-        _lookin_server_handle = NULL;
+        NSLog(@"[!] LS: '%@': InjectLS is Loaded Before.", bundleID);
+        return;
     }
+    
     // 其他正常情况, 加载 LookinServer
-    _lookin_server_handle = dlopen("/Library/Frameworks/LookinServer.framework/LookinServer", RTLD_GLOBAL | RTLD_NOW);
-    NSLog(@"[+] LS: Loaded for '%@'.", bundleID);
+    NSString *path = [NSBundle bundleForClass:[_LookinServerBridge class]].bundlePath;
+    path = [path stringByAppendingPathComponent:@"LookinServer.framework/LookinServer"];
+    // NSLog(@"[+] LS: '%@': InjectLS Path: %@", bundleID, path);
+    
+    _lookin_server_handle = dlopen(path.UTF8String, RTLD_GLOBAL | RTLD_LAZY);
+    NSLog(@"[+] LS: '%@': InjectLS Loaded.", bundleID);
 }
 
 __attribute__((destructor(0)))
@@ -88,6 +99,6 @@ static void _destructor(int argc, const char *argv[]) {
         dlclose(_lookin_server_handle);
         _lookin_server_handle = NULL;
         NSString *bundleID = [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString *)kCFBundleIdentifierKey];
-        NSLog(@"[-] LS: Close for '%@'.", bundleID);
+        NSLog(@"[-] LS: '%@': InjectLS Closed.", bundleID);
     }
 }
