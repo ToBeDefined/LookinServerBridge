@@ -37,15 +37,6 @@
 #import "CaptainHook/CaptainHook.h"
 #include <notify.h> // not required; for examples only
 
-
-///
-/// 1. copy LookinServer.framework to /usr/lib/LookinServer.framework
-/// 2. cd /usr/lib/LookinServer.framework/
-/// 3. chmod 777 LookinServer
-/// 4. cd /Library/Frameworks/
-/// 5. ln -s /usr/lib/LookinServer.framework LookinServer.framework
-///
-
 @interface _LookinServerBridge : NSObject
 @end
 
@@ -58,7 +49,7 @@ static void _constructor(int argc, const char *argv[]) {
     NSString *bundleID = [NSBundle.mainBundle objectForInfoDictionaryKey:(__bridge NSString *)kCFBundleIdentifierKey];
     NSLog(@"[*] LS: '%@': Loading...", bundleID);
     
-    // 排除 springboard
+    // 排除 SpringBoard
     if ([bundleID.lowercaseString isEqualToString:@"com.apple.springboard"]) {
         NSLog(@"[!] LS: '%@': Don't Load InjectLS for SpringBoard App.", bundleID);
         return;
@@ -79,17 +70,40 @@ static void _constructor(int argc, const char *argv[]) {
         return;
     }
     
+    // 判断是否已经加载
     if (_lookin_server_handle != NULL) {
         NSLog(@"[!] LS: '%@': InjectLS is Loaded Before.", bundleID);
         return;
     }
     
     // 其他正常情况, 加载 LookinServer
-    NSString *path = [NSBundle bundleForClass:[_LookinServerBridge class]].bundlePath;
-    path = [path stringByAppendingPathComponent:@"LookinServer.framework/LookinServer"];
-    // NSLog(@"[+] LS: '%@': InjectLS Path: %@", bundleID, path);
+    NSString *bundlePath = [NSBundle bundleForClass:[_LookinServerBridge class]].bundlePath;
+    NSString *lookinServerPath = [bundlePath stringByAppendingPathComponent:@"LookinServer.framework/LookinServer"];
+    NSLog(@"[*] LS: '%@': InjectLS Path: %@", bundleID, lookinServerPath);
     
-    _lookin_server_handle = dlopen(path.UTF8String, RTLD_GLOBAL | RTLD_LAZY);
+    // LookinServer 二进制文件不存在
+    if (![NSFileManager.defaultManager fileExistsAtPath:lookinServerPath]) {
+        NSLog(@"[!] LS: '%@': LookinServer Binary Not Found, Copy Fully LookinServer.framework to: %@", bundleID, bundlePath);
+        return;
+    }
+    
+    // 输出 LookinServer 版本号
+    NSString *lookinServerInfoPlistPath = [bundlePath stringByAppendingPathComponent:@"LookinServer.framework/Info.plist"];
+    BOOL outputVersionSuccess = NO;
+    if ([NSFileManager.defaultManager fileExistsAtPath:lookinServerInfoPlistPath]) {
+        NSDictionary *infoDict = [NSDictionary dictionaryWithContentsOfFile:lookinServerInfoPlistPath];
+        NSString *version = [infoDict objectForKey:@"CFBundleShortVersionString"];
+        if (version) {
+            NSLog(@"[*] LS: '%@': LookinServer Version (from Info.plist): %@", bundleID, version);
+            outputVersionSuccess = YES;
+        }
+    }
+    if (!outputVersionSuccess) {
+        NSLog(@"[!] LS: '%@': LookinServer Version Not Found", bundleID);
+    }
+    
+    // 加载
+    _lookin_server_handle = dlopen(lookinServerPath.UTF8String, RTLD_GLOBAL | RTLD_LAZY);
     NSLog(@"[+] LS: '%@': InjectLS Loaded.", bundleID);
 }
 
