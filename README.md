@@ -1,5 +1,7 @@
 ## 在越狱设备中使用 [Lookin](https://lookin.work/) 查看越狱设备所有安装的 App UI
 
+> `unc0ver` 越狱可能出现闪退问题，暂未修复，使用 `Chimera` 越狱目前没有问题
+
 ### MonkeyDev 安装
 
 - 下载 `Lookin` 安装到 Mac [Link](https://lookin.work/)
@@ -14,7 +16,7 @@
 - 以 `root` 用户连接越狱手机
 - 将下载的 `LookinServer.framework` 和项目生成的 `LookinServerBridge.dylib` 和 `LookinServerBridge.plist` 拷贝到手机的 `/Library/MobileSubstrate/DynamicLibraries/` 目录
 
-  > 当前项目代码生成的动态库路径 ./LookinServerBridge/Package/Library/MobileSubstrate/DynamicLibraries/
+> 当前代码生成的动态库以及 LookinServer.framework 等所需文件在根目录 `Binary.zip` 压缩包, 解压即可
 
 - 运行 `killall -9 SpringBoard` 重启 SpringBoard
 
