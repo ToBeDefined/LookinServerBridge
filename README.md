@@ -4,7 +4,7 @@
 
 - 下载 `Lookin` 安装到 Mac [Link](https://lookin.work/)
 - 下载 `LookinServer.framework` [Link](https://github.com/QMUI/LookinServer/tree/master/LookinServer.framework)
-- 将下载的 `LookinServer.framework` 拷贝到手机的 `/usr/lib/TweakInject/` 目录
+- 将下载的 `LookinServer.framework` 拷贝到手机的 `/Library/MobileSubstrate/DynamicLibraries/` 目录
 - 使用安装了 MonkeyDev 的 Xcode 运行项目
 
 ### 手动安装
@@ -12,7 +12,7 @@
 - 下载 `Lookin` 安装到 Mac [Link](https://lookin.work/)
 - 下载 `LookinServer.framework` [Link](https://github.com/QMUI/LookinServer/tree/master/LookinServer.framework)
 - 以 `root` 用户连接越狱手机
-- 将下载的 `LookinServer.framework` 和项目生成的 `LookinServerBridge.dylib` 和 `LookinServerBridge.plist` 拷贝到手机的 `/usr/lib/TweakInject/` 目录
+- 将下载的 `LookinServer.framework` 和项目生成的 `LookinServerBridge.dylib` 和 `LookinServerBridge.plist` 拷贝到手机的 `/Library/MobileSubstrate/DynamicLibraries/` 目录
 
   > 当前项目代码生成的动态库路径 ./LookinServerBridge/Package/Library/MobileSubstrate/DynamicLibraries/
 
